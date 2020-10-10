@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/home/comp6733/contiki-git/platform/srf06-cc26xx/**",
+                "/home/comp6733/contiki-git/core/**",
+                "/home/comp6733/contiki-git/cpu/cc26xx-cc13xx/**",
+                "/usr/arm-none-eabi/include",
+                "/home/comp6733/contiki-git/platform/srf06-cc26xx/sensortag"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}

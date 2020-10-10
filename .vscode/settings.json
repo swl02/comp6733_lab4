@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "leds.h": "c",
+        "stdlib.h": "c",
+        "button-sensor.h": "c"
+    }
+}
