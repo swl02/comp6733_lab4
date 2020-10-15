@@ -98,7 +98,7 @@ AUTOSTART_PROCESSES(&er_example_server);
 PROCESS_THREAD(er_example_server, ev, data)
 {
   PROCESS_BEGIN();
-
+	SENSORS_ACTIVATE(mpu_9250_sensor);
   PROCESS_PAUSE();
 
   PRINTF("Starting Erbium Example Server\n");
@@ -123,6 +123,8 @@ PROCESS_THREAD(er_example_server, ev, data)
    * WARNING: Activating twice only means alternate path, not two instances!
    * All static variables are the same for each URI path.
    */
+  rest_activate_resource(&res_sub, "test/sub");
+  rest_activate_resource(&res_chunks, "test/chunk");
   rest_activate_resource(&res_mpu, "sensor/mpu/gyro");
   rest_activate_resource(&res_hello, "test/hello");
   rest_activate_resource(&res_push, "test/push");
@@ -143,7 +145,6 @@ PROCESS_THREAD(er_example_server, ev, data)
   rest_activate_resource(&res_temperature, "sensors/temperature");  
   SENSORS_ACTIVATE(temperature_sensor);  
 #endif
-	SENSORS_ACTIVATE(mpu_9250_sensor);
   /* Define application-specific events here. */
   while(1) {
     PROCESS_WAIT_EVENT();

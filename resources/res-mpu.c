@@ -37,63 +37,166 @@
  */
 
 #include "contiki.h"
-
-#if PLATFORM_HAS_LEDS
+#include <limits.h>
 
 #include <string.h>
 #include "contiki.h"
 #include "rest-engine.h"
 #include "board-peripherals.h"
-
+#define CHUNKS_TOTAL    2050
 
 
 static void res_get_handler(void *request, void *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
+char type[10];
+static struct ctimer mpu_timer;
+int counter = 0;
+char out_str[1000];
 
-/* A simple actuator example. Toggles the red led */
-RESOURCE(res_mpu,
-         "",
-         NULL,
-         res_get_handler,
-         NULL,
-         NULL);
+/*
+ * Example for a resource that also handles all its sub-resources.
+ * Use REST.get_url() to multiplex the handling of the request depending on the Uri-Path.
+ */
+PARENT_RESOURCE(res_mpu,
+                "title=\"Sub-resource demo\"",
+                res_get_handler,
+                NULL,
+                NULL,
+                NULL);
+
+
+
+static void gyro_init(void *n) {
+  mpu_9250_sensor.configure(SENSORS_ACTIVE,MPU_9250_SENSOR_TYPE_GYRO_ALL);
+  int val = 0;
+  if (counter < (int)n) {
+	  ctimer_reset(&mpu_timer);
+    if (strncmp(type,"x",1) == 0) {
+      val = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_X);
+    } else if (strncmp(type,"y",1) == 0) {
+      val = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Y);
+    } else if (strncmp(type,"z",1) == 0) {
+      val = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Z);
+    }
+
+    sprintf(out_str,REST_MAX_CHUNK_SIZE,"The gyro %c value is %d ./s\n",(char)type[0],val);
+
+
+	  counter++;
+
+  } else {
+	  counter = 0;
+	  ctimer_stop(&mpu_timer);
+  }
+
+
+}
+
 
 static void
 res_get_handler(void *request, void *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
-  const char *len = NULL;
-  /* Some data that has the length up to REST_MAX_CHUNK_SIZE. For more, see the chunk resource. */
-  char const *const message = "Hello World! ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxy";
-  int length = 12; /*           |<-------->| */
-  char val [REST_MAX_CHUNK_SIZE][REST_MAX_CHUNK_SIZE];
+  REST.set_header_content_type(response, REST.type.TEXT_PLAIN);
 
-  /* The query string can be retrieved by rest_get_query() or parsed for its key-value pairs. */
-  if(REST.get_query_variable(request, "len", &len)) {
-    length = atoi(len);
-    if(length < 0) {
-      length = 0;
-    }
-    if(length > REST_MAX_CHUNK_SIZE) {
-      length = REST_MAX_CHUNK_SIZE;
-    }
-    memcpy(buffer, message, length);
+  const char *uri_path = NULL;
+  int len = REST.get_url(request, &uri_path);
+  int base_len = strlen(res_mpu.url);
+
+
+  if(len == base_len) {
+    snprintf((char *)buffer, REST_MAX_CHUNK_SIZE, "Request any sub-resource of /%s", res_mpu.url);
   } else {
-    memcpy(buffer, message, length);
-  } REST.set_header_content_type(response, REST.type.TEXT_PLAIN); /* text/plain is the default, hence this option could be omitted. */
-  
-  
-  REST.get_query(request,val);
-
-  int i = 0;
-  while (val[i] != NULL) {
-    printf("here %s\n",val[i]);
-    i++;
+    snprintf((char *)buffer, REST_MAX_CHUNK_SIZE, ".%.*s", len - base_len, uri_path + base_len);
   }
 
+  char * token = strtok(buffer,"/");
+  int stage = 0;
+  int n = 0;
+  while (token != NULL) {
+    if (stage == 1) {
+      strcpy(type,token);
+    }
+
+    if (stage == 2) {
+      n = atoi(token);
+    }
 
 
-  
-  REST.set_header_etag(response, (uint8_t *)&length, 1);
-  REST.set_response_payload(response, buffer, length);
 
+    token = strtok(NULL,"/");
+    stage ++;
+  }
+
+  ctimer_set(&mpu_timer, CLOCK_SECOND, gyro_init, (void *)n);	
+
+  // int32_t strpos = 0;
+
+  // /* Check the offset for boundaries of the resource data. */
+  // if(*offset >= CHUNKS_TOTAL) {
+  //   REST.set_response_status(response, REST.status.BAD_OPTION);
+  //   /* A block error message should not exceed the minimum block size (16). */
+
+  //   const char *error_msg = "BlockOutOfScope";
+  //   REST.set_response_payload(response, error_msg, strlen(error_msg));
+  //   return;
+  // }
+
+  // /* Generate data until reaching CHUNKS_TOTAL. */
+  // while(strpos < preferred_size) {
+  //   strpos += snprintf((char *)out_str + strpos, preferred_size - strpos + 1, "%s", (char *)out_str);
+  // }
+
+  // /* snprintf() does not adjust return value if truncated by size. */
+  // if(strpos > preferred_size) {
+  //   strpos = preferred_size;
+  //   /* Truncate if above CHUNKS_TOTAL bytes. */
+  // }
+  // if(*offset + (int32_t)strpos > CHUNKS_TOTAL) {
+  //   strpos = CHUNKS_TOTAL - *offset;
+  // }
+  // REST.set_response_payload(response, out_str, strpos);
+
+  // /* IMPORTANT for chunk-wise resources: Signal chunk awareness to REST engine. */
+  // *offset += strpos;
+
+  // /* Signal end of resource representation. */
+  // if(*offset >= CHUNKS_TOTAL) {
+  //   *offset = -1;
+  // }
+
+
+
+
+
+
+
+  REST.set_response_payload(response, out_str, strlen((char *)out_str));
 }
-#endif /* PLATFORM_HAS_LEDS */
+
+
+
+// static void
+// res_periodic_handler()
+// {
+//   mpu_9250_sensor.configure(SENSORS_ACTIVE,MPU_9250_SENSOR_TYPE_GYRO_ALL);
+//     int val = 0;
+//     if (strncmp(type,"x",1) == 0) {
+//       val = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_X);
+//     } else if (strncmp(type,"y",1) == 0) {
+//       val = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Y);
+//     } else if (strncmp(type,"z",1) == 0) {
+//       val = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Z);
+//     }
+  
+
+
+//   ++interval_counter;
+
+//   if((abs(val - val_old) >= CHANGE && interval_counter >= INTERVAL_MIN) || 
+//      interval_counter >= INTERVAL_MAX) {
+//      interval_counter = 0;
+//      val_old = val;
+//     /* Notify the registered observers which will trigger the res_get_handler to create the response. */
+//     REST.notify_subscribers(&res_mpu);
+//   }
+// }
+

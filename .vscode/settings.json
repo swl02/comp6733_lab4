@@ -2,6 +2,7 @@
     "files.associations": {
         "leds.h": "c",
         "stdlib.h": "c",
-        "button-sensor.h": "c"
+        "button-sensor.h": "c",
+        "board-peripherals.h": "c"
     }
 }

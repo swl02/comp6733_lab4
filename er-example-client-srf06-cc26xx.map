@@ -37,7 +37,7 @@ contiki-srf06-cc26xx.a(opt-3001-sensor)
 contiki-srf06-cc26xx.a(hdc-1000-sensor)
                               contiki-srf06-cc26xx.a(sensortag-senso) (hdc_1000_sensor)
 contiki-srf06-cc26xx.a(mpu-9250-sensor)
-                              contiki-srf06-cc26xx.a(sensortag-senso) (mpu_9250_sensor)
+                              obj_srf06-cc26xx/res-mpu.o (mpu_9250_sensor)
 contiki-srf06-cc26xx.a(button-sensor.o)
                               contiki-srf06-cc26xx.a(sensortag-senso) (button_right_sensor)
 contiki-srf06-cc26xx.a(reed-relay.o)
@@ -72,6 +72,8 @@ contiki-srf06-cc26xx.a(dbg-printf.o)
                               er-example-client.co (printf)
 contiki-srf06-cc26xx.a(dbg-snprintf.o)
                               obj_srf06-cc26xx/res-mirror.o (snprintf)
+contiki-srf06-cc26xx.a(dbg-sprintf.o)
+                              obj_srf06-cc26xx/res-mpu.o (sprintf)
 contiki-srf06-cc26xx.a(strformat.o)
                               contiki-srf06-cc26xx.a(dbg-printf.o) (format_str_v)
 contiki-srf06-cc26xx.a(autostart.o)
@@ -257,13 +259,17 @@ contiki-srf06-cc26xx.a(mac-sequence.o)
 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strchr.o)
                               contiki-srf06-cc26xx.a(er-coap.o) (strchr)
 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strcpy.o)
-                              obj_srf06-cc26xx/res-separate.o (strcpy)
+                              obj_srf06-cc26xx/res-mpu.o (strcpy)
 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strlen.o)
-                              obj_srf06-cc26xx/res-sub.o (strlen)
+                              obj_srf06-cc26xx/res-mpu.o (strlen)
 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strncmp.o)
                               contiki-srf06-cc26xx.a(er-coap.o) (strncmp)
 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strncpy.o)
                               contiki-srf06-cc26xx.a(er-coap-observe) (strncpy)
+/usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok.o)
+                              obj_srf06-cc26xx/res-mpu.o (strtok)
+/usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok_r.o)
+                              /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok.o) (__strtok_r)
 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtol.o)
                               /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-atoi.o) (_strtol_r)
 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-ctype_.o)
@@ -277,6 +283,7 @@ uip_ds6_if          0xf8              contiki-srf06-cc26xx.a(uip-ds6.o)
 uip_ds6_netif_addr_list_offset
                     0x1               contiki-srf06-cc26xx.a(uip-ds6.o)
 uip_len             0x2               contiki-srf06-cc26xx.a(uip6.o)
+type                0xa               obj_srf06-cc26xx/res-mpu.o
 uip_ds6_addr_size   0x1               contiki-srf06-cc26xx.a(uip-ds6.o)
 uip_sappdata        0x4               contiki-srf06-cc26xx.a(uip6.o)
 packetbuf_addrs     0x10              contiki-srf06-cc26xx.a(packetbuf.o)
@@ -298,6 +305,7 @@ uip_conn            0x4               contiki-srf06-cc26xx.a(uip6.o)
 tcpip_event         0x1               contiki-srf06-cc26xx.a(tcpip.o)
 uip_icmp6_conns     0x8               contiki-srf06-cc26xx.a(uip6.o)
 server_ipaddr       0x10              er-example-client.co
+out_str             0x3e8             obj_srf06-cc26xx/res-mpu.o
 t0                  0x4               contiki-srf06-cc26xx.a(mpu-9250-sensor)
 sensors_flags       0x9               contiki-srf06-cc26xx.a(sensortag-senso)
 serial_line_event_message
@@ -360,13 +368,19 @@ Discarded input sections
  .data          0x00000000        0x0 obj_srf06-cc26xx/res-mpu.o
  .bss           0x00000000        0x0 obj_srf06-cc26xx/res-mpu.o
  .text.res_get_handler
-                0x00000000       0x80 obj_srf06-cc26xx/res-mpu.o
+                0x00000000       0xd8 obj_srf06-cc26xx/res-mpu.o
+ .text.gyro_init
+                0x00000000       0x88 obj_srf06-cc26xx/res-mpu.o
  .rodata.str1.1
-                0x00000000       0x4f obj_srf06-cc26xx/res-mpu.o
+                0x00000000       0x5f obj_srf06-cc26xx/res-mpu.o
+ .bss.mpu_timer
+                0x00000000       0x20 obj_srf06-cc26xx/res-mpu.o
  .data.res_mpu  0x00000000       0x24 obj_srf06-cc26xx/res-mpu.o
+ .bss.counter   0x00000000        0x4 obj_srf06-cc26xx/res-mpu.o
  .comment       0x00000000       0x71 obj_srf06-cc26xx/res-mpu.o
  .ARM.attributes
                 0x00000000       0x33 obj_srf06-cc26xx/res-mpu.o
+ COMMON         0x00000000      0x3f2 obj_srf06-cc26xx/res-mpu.o
  .text          0x00000000        0x0 obj_srf06-cc26xx/res-sht11.o
  .data          0x00000000        0x0 obj_srf06-cc26xx/res-sht11.o
  .bss           0x00000000        0x0 obj_srf06-cc26xx/res-sht11.o
@@ -798,6 +812,15 @@ Discarded input sections
  .text          0x00000000        0x0 contiki-srf06-cc26xx.a(dbg-snprintf.o)
  .data          0x00000000        0x0 contiki-srf06-cc26xx.a(dbg-snprintf.o)
  .bss           0x00000000        0x0 contiki-srf06-cc26xx.a(dbg-snprintf.o)
+ .text          0x00000000        0x0 contiki-srf06-cc26xx.a(dbg-sprintf.o)
+ .data          0x00000000        0x0 contiki-srf06-cc26xx.a(dbg-sprintf.o)
+ .bss           0x00000000        0x0 contiki-srf06-cc26xx.a(dbg-sprintf.o)
+ .text.buffer_str
+                0x00000000       0x16 contiki-srf06-cc26xx.a(dbg-sprintf.o)
+ .text.sprintf  0x00000000       0x30 contiki-srf06-cc26xx.a(dbg-sprintf.o)
+ .comment       0x00000000       0x71 contiki-srf06-cc26xx.a(dbg-sprintf.o)
+ .ARM.attributes
+                0x00000000       0x33 contiki-srf06-cc26xx.a(dbg-sprintf.o)
  .text          0x00000000        0x0 contiki-srf06-cc26xx.a(strformat.o)
  .data          0x00000000        0x0 contiki-srf06-cc26xx.a(strformat.o)
  .bss           0x00000000        0x0 contiki-srf06-cc26xx.a(strformat.o)
@@ -1350,6 +1373,23 @@ Discarded input sections
  .debug_frame   0x00000000       0x34 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strncpy.o)
  .ARM.attributes
                 0x00000000       0x2d /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strncpy.o)
+ .text          0x00000000        0x0 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok.o)
+ .data          0x00000000        0x0 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok.o)
+ .bss           0x00000000        0x0 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok.o)
+ .text.strtok   0x00000000       0x10 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok.o)
+ .debug_frame   0x00000000       0x20 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok.o)
+ .ARM.attributes
+                0x00000000       0x2d /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok.o)
+ .text          0x00000000        0x0 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok_r.o)
+ .data          0x00000000        0x0 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok_r.o)
+ .bss           0x00000000        0x0 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok_r.o)
+ .text.__strtok_r
+                0x00000000       0x64 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok_r.o)
+ .text.strtok_r
+                0x00000000        0x8 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok_r.o)
+ .debug_frame   0x00000000       0x48 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok_r.o)
+ .ARM.attributes
+                0x00000000       0x2d /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok_r.o)
  .text          0x00000000        0x0 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtol.o)
  .data          0x00000000        0x0 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtol.o)
  .bss           0x00000000        0x0 /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtol.o)
@@ -4230,6 +4270,8 @@ __ltdf2                                           /usr/bin/../lib/gcc/arm-none-e
 __muldf3                                          /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7-m/libgcc.a(_arm_muldivdf3.o)
 __mulsf3                                          /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7-m/libgcc.a(_arm_muldivsf3.o)
 __nedf2                                           /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7-m/libgcc.a(_arm_cmpdf2.o)
+__strtok_r                                        /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok_r.o)
+                                                  /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok.o)
 __subdf3                                          /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7-m/libgcc.a(_arm_addsubdf3.o)
 __subsf3                                          /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7-m/libgcc.a(_arm_addsubsf3.o)
 __truncdfsf2                                      /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7-m/libgcc.a(_arm_truncdfsf2.o)
@@ -4246,6 +4288,7 @@ _etext                                            obj_srf06-cc26xx/startup_gcc.o
 _global_impure_ptr                                /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-impure.o)
 _impure_ptr                                       /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-impure.o)
                                                   /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtol.o)
+                                                  /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok.o)
                                                   /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-rand.o)
                                                   /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-errno.o)
 _strtol_r                                         /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtol.o)
@@ -4529,6 +4572,7 @@ coap_set_token                                    contiki-srf06-cc26xx.a(er-coap
                                                   contiki-srf06-cc26xx.a(er-coap-engine.)
 copysign                                          /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libm.a(lib_a-s_copysign.o)
                                                   /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libm.a(lib_a-s_scalbn.o)
+counter                                           obj_srf06-cc26xx/res-mpu.o
 ctimer_expired                                    contiki-srf06-cc26xx.a(ctimer.o)
 ctimer_init                                       contiki-srf06-cc26xx.a(ctimer.o)
                                                   contiki-srf06-cc26xx.a(contiki-main.o)
@@ -4537,6 +4581,7 @@ ctimer_reset                                      contiki-srf06-cc26xx.a(ctimer.
                                                   contiki-srf06-cc26xx.a(rpl-timers.o)
                                                   obj_srf06-cc26xx/res-red.o
                                                   obj_srf06-cc26xx/res-green.o
+                                                  obj_srf06-cc26xx/res-mpu.o
 ctimer_restart                                    contiki-srf06-cc26xx.a(ctimer.o)
 ctimer_set                                        contiki-srf06-cc26xx.a(ctimer.o)
                                                   contiki-srf06-cc26xx.a(rpl-timers.o)
@@ -4547,6 +4592,7 @@ ctimer_set                                        contiki-srf06-cc26xx.a(ctimer.
                                                   contiki-srf06-cc26xx.a(bmp-280-sensor.)
                                                   obj_srf06-cc26xx/res-red.o
                                                   obj_srf06-cc26xx/res-green.o
+                                                  obj_srf06-cc26xx/res-mpu.o
 ctimer_set_with_process                           contiki-srf06-cc26xx.a(ctimer.o)
 ctimer_stop                                       contiki-srf06-cc26xx.a(ctimer.o)
                                                   contiki-srf06-cc26xx.a(rpl-timers.o)
@@ -4556,6 +4602,7 @@ ctimer_stop                                       contiki-srf06-cc26xx.a(ctimer.
                                                   contiki-srf06-cc26xx.a(opt-3001-sensor)
                                                   contiki-srf06-cc26xx.a(tmp-007-sensor.)
                                                   contiki-srf06-cc26xx.a(bmp-280-sensor.)
+                                                  obj_srf06-cc26xx/res-mpu.o
 dao_ack_output                                    contiki-srf06-cc26xx.a(rpl-icmp6.o)
 dao_output                                        contiki-srf06-cc26xx.a(rpl-icmp6.o)
                                                   contiki-srf06-cc26xx.a(rpl-timers.o)
@@ -4640,6 +4687,7 @@ finite                                            /usr/bin/../lib/gcc/arm-none-e
                                                   /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libm.a(lib_a-w_pow.o)
 format_str                                        contiki-srf06-cc26xx.a(strformat.o)
 format_str_v                                      contiki-srf06-cc26xx.a(strformat.o)
+                                                  contiki-srf06-cc26xx.a(dbg-sprintf.o)
                                                   contiki-srf06-cc26xx.a(dbg-snprintf.o)
                                                   contiki-srf06-cc26xx.a(dbg-printf.o)
 frame802154_check_dest_panid                      contiki-srf06-cc26xx.a(frame802154.o)
@@ -4847,6 +4895,7 @@ memcpy                                            /usr/bin/../lib/gcc/arm-none-e
                                                   contiki-srf06-cc26xx.a(rpl-dag.o)
                                                   contiki-srf06-cc26xx.a(uip6.o)
                                                   contiki-srf06-cc26xx.a(sicslowpan.o)
+                                                  contiki-srf06-cc26xx.a(dbg-sprintf.o)
                                                   contiki-srf06-cc26xx.a(dbg-snprintf.o)
                                                   contiki-srf06-cc26xx.a(ieee-mode.o)
                                                   contiki-srf06-cc26xx.a(er-coap-observe)
@@ -4854,7 +4903,6 @@ memcpy                                            /usr/bin/../lib/gcc/arm-none-e
                                                   contiki-srf06-cc26xx.a(er-coap-separat)
                                                   contiki-srf06-cc26xx.a(er-coap-observe)
                                                   contiki-srf06-cc26xx.a(er-coap.o)
-                                                  obj_srf06-cc26xx/res-mpu.o
                                                   obj_srf06-cc26xx/res-hello.o
 memmove                                           /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-memmove.o)
                                                   contiki-srf06-cc26xx.a(rpl-ext-header.)
@@ -4884,6 +4932,7 @@ memset                                            /usr/bin/../lib/gcc/arm-none-e
 mpu_9250_sensor                                   contiki-srf06-cc26xx.a(mpu-9250-sensor)
                                                   contiki-srf06-cc26xx.a(board.o)
                                                   contiki-srf06-cc26xx.a(sensortag-senso)
+                                                  obj_srf06-cc26xx/res-mpu.o
 nan                                               /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libm.a(lib_a-s_nan.o)
                                                   /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libm.a(lib_a-e_pow.o)
 nbr_routes                                        contiki-srf06-cc26xx.a(uip-ds6-route.o)
@@ -4954,6 +5003,7 @@ oscillators_switch_to_hf_rc                       contiki-srf06-cc26xx.a(oscilla
 oscillators_switch_to_hf_xosc                     contiki-srf06-cc26xx.a(oscillators.o)
                                                   contiki-srf06-cc26xx.a(rf-ble.o)
                                                   contiki-srf06-cc26xx.a(ieee-mode.o)
+out_str                                           obj_srf06-cc26xx/res-mpu.o
 packetbuf_addr                                    contiki-srf06-cc26xx.a(packetbuf.o)
                                                   contiki-srf06-cc26xx.a(mac-sequence.o)
                                                   contiki-srf06-cc26xx.a(nullrdc.o)
@@ -5027,7 +5077,6 @@ printf                                            contiki-srf06-cc26xx.a(dbg-pri
                                                   contiki-srf06-cc26xx.a(contiki-main.o)
                                                   contiki-srf06-cc26xx.a(er-coap-observe)
                                                   obj_srf06-cc26xx/res-b1-sep-b2.o
-                                                  obj_srf06-cc26xx/res-mpu.o
                                                   er-example-client.co
 process_alloc_event                               contiki-srf06-cc26xx.a(process.o)
                                                   contiki-srf06-cc26xx.a(tcpip.o)
@@ -5371,6 +5420,7 @@ snprintf                                          contiki-srf06-cc26xx.a(dbg-snp
                                                   obj_srf06-cc26xx/res-push.o
                                                   obj_srf06-cc26xx/res-sub.o
                                                   obj_srf06-cc26xx/res-event.o
+                                                  obj_srf06-cc26xx/res-mpu.o
                                                   obj_srf06-cc26xx/res-mirror.o
 soc_rtc_get_next_trigger                          contiki-srf06-cc26xx.a(soc-rtc.o)
                                                   contiki-srf06-cc26xx.a(lpm.o)
@@ -5381,6 +5431,8 @@ soc_rtc_last_isr_time                             contiki-srf06-cc26xx.a(soc-rtc
 soc_rtc_schedule_one_shot                         contiki-srf06-cc26xx.a(soc-rtc.o)
                                                   contiki-srf06-cc26xx.a(lpm.o)
                                                   contiki-srf06-cc26xx.a(rtimer-arch.o)
+sprintf                                           contiki-srf06-cc26xx.a(dbg-sprintf.o)
+                                                  obj_srf06-cc26xx/res-mpu.o
 srand                                             /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-rand.o)
                                                   contiki-srf06-cc26xx.a(random.o)
 stimer_elapsed                                    contiki-srf06-cc26xx.a(stimer.o)
@@ -5401,6 +5453,7 @@ strchr                                            /usr/bin/../lib/gcc/arm-none-e
                                                   contiki-srf06-cc26xx.a(er-coap.o)
 strcpy                                            /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strcpy.o)
                                                   obj_srf06-cc26xx/res-separate.o
+                                                  obj_srf06-cc26xx/res-mpu.o
 strlen                                            /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strlen.o)
                                                   contiki-srf06-cc26xx.a(rf-ble.o)
                                                   contiki-srf06-cc26xx.a(putchar.o)
@@ -5413,6 +5466,7 @@ strlen                                            /usr/bin/../lib/gcc/arm-none-e
                                                   contiki-srf06-cc26xx.a(er-coap.o)
                                                   obj_srf06-cc26xx/res-separate.o
                                                   obj_srf06-cc26xx/res-sub.o
+                                                  obj_srf06-cc26xx/res-mpu.o
 strncmp                                           /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strncmp.o)
                                                   contiki-srf06-cc26xx.a(sensors.o)
                                                   contiki-srf06-cc26xx.a(rest-engine.o)
@@ -5420,6 +5474,9 @@ strncmp                                           /usr/bin/../lib/gcc/arm-none-e
                                                   contiki-srf06-cc26xx.a(er-coap.o)
 strncpy                                           /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strncpy.o)
                                                   contiki-srf06-cc26xx.a(er-coap-observe)
+strtok                                            /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok.o)
+                                                  obj_srf06-cc26xx/res-mpu.o
+strtok_r                                          /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtok_r.o)
 strtol                                            /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-strtol.o)
                                                   /usr/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7-m/libc.a(lib_a-atoi.o)
 t0                                                contiki-srf06-cc26xx.a(mpu-9250-sensor)
@@ -5462,6 +5519,7 @@ tmp_007_sensor                                    contiki-srf06-cc26xx.a(tmp-007
 trimDevice                                        contiki-srf06-cc26xx.a(setup.o)
                                                   obj_srf06-cc26xx/startup_gcc.o
 tx_power_current                                  contiki-srf06-cc26xx.a(ieee-mode.o)
+type                                              obj_srf06-cc26xx/res-mpu.o
 uDMAErrIntHandler                                 obj_srf06-cc26xx/startup_gcc.o
 uDMAIntHandler                                    obj_srf06-cc26xx/startup_gcc.o
 udp_attach                                        contiki-srf06-cc26xx.a(tcpip.o)
